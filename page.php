@@ -26,7 +26,9 @@ $result = $q->fetch(PDO::FETCH_ASSOC);
     	echo $result['Title'];
     	echo "</title>";
     	echo "<body>";
+    	include 'themes/header.php';
     	echo eval("?>".$result['Content']."<?");
+    	include 'footer.php';
     	echo "</body>";
     	echo "</html>";
     }
