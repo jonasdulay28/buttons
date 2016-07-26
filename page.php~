@@ -1,0 +1,36 @@
+<?php
+//load the class
+require_once 'conf.php';
+//$db = new BTTNS;
+//get the database details
+//$conn_host = $db->host;
+//$conn_database = $db->database;
+//$conn_domain = $db->domain;
+//$conn_username = $db->username;
+//$conn_password = $db->password;
+//connect to db
+$conn = new PDO("mysql:host=localhost;dbname=db_buttons;charset=utf8mb4", "root", "ranjan12345");
+
+if(isset($_GET['id']) && is_numeric($_GET['id'])){
+	//get the page id
+$pageid = $_GET['id'];
+$q = $conn->query("SELECT * FROM btns_Pages WHERE ID = '$pageid'");
+$result = $q->fetch(PDO::FETCH_ASSOC);
+    if(empty($result)){
+    	header("Location: themes/404.html");
+    }else{
+    	echo "<!DOCTYPE html>";
+    	echo "<html>";
+    	echo "<head>";
+    	echo "<title>";
+    	echo $result['Title'];
+    	echo "</title>";
+    	echo "<body>";
+    	echo eval("?>".$result['Content']."<?");
+    	echo "</body>";
+    	echo "</html>";
+    }
+	
+}else{
+	header("Location: themes/malformed_request.html");
+}

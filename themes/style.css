@@ -1,0 +1,29 @@
+*{
+	margin: 0px;
+	padding: 0px;
+	color: black;
+}
+    
+ body{
+    	width: 100%;
+    }
+     
+    .footer{
+    	width: 100%;
+    	position: fixed;
+    	margin-bottom: 0px;
+        margin:0 0 0 0;
+       padding:0;
+    	height: 80px;
+    	background-color: #404040;
+    	display: block;
+    }
+     
+    .footerContent{
+    	width: 80%;
+    	margin: auto;
+    	padding: 5px;
+    	text-align: center;
+    	border-left: 1px solid #fff;
+    	border-right: 1px solid #fff;
+    }

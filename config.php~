@@ -1,0 +1,171 @@
+<?php
+
+class Database
+{
+    
+    public $host = 'localhost';
+    public $db_name = 'db_buttons';
+    public $username = 'root';
+    public $password = 'ranjan12345';
+    public $conn;
+     
+    public function dbConnection()
+	{
+     
+	    $this->conn = null;    
+        try
+		{
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
+        }
+		catch(PDOException $exception)
+		{
+            echo "Connection error: " . $exception->getMessage();
+        }
+         
+        return $this->conn;
+    }
+}
+/*hit counter*/
+$db= new Database;
+$hostname_visitors =  $db->host;
+$database_visitors =  $db->db_name;
+$username_visitors =  $db->username;
+$password_visitors =  $db->password;
+
+$visitors = mysql_connect($hostname_visitors, $username_visitors, $password_visitors) or die("could not connect!". mysql_error());
+mysql_select_db($database_visitors) or die('could not select database!');
+
+function getBrowserType () {
+if (!empty($_SERVER['HTTP_USER_AGENT'])) 
+{ 
+   $HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT']; 
+}
+else if (!empty($HTTP_SERVER_VARS['HTTP_USER_AGENT'])) 
+{ 
+   $HTTP_USER_AGENT = $HTTP_SERVER_VARS['HTTP_USER_AGENT']; 
+} 
+else if (!isset($HTTP_USER_AGENT)) 
+{ 
+   $HTTP_USER_AGENT = ''; 
+} 
+if (ereg('Opera(/| )([0-9].[0-9]{1,2})', $HTTP_USER_AGENT, $log_version)) 
+{ 
+   $browser_version = $log_version[2]; 
+   $browser_agent = 'opera'; 
+} 
+else if (ereg('MSIE ([0-9].[0-9]{1,2})', $HTTP_USER_AGENT, $log_version)) 
+{ 
+   $browser_version = $log_version[1]; 
+   $browser_agent = 'ie'; 
+} 
+else if (ereg('OmniWeb/([0-9].[0-9]{1,2})', $HTTP_USER_AGENT, $log_version)) 
+{ 
+   $browser_version = $log_version[1]; 
+   $browser_agent = 'omniweb'; 
+} 
+else if (ereg('Netscape([0-9]{1})', $HTTP_USER_AGENT, $log_version)) 
+{ 
+   $browser_version = $log_version[1]; 
+   $browser_agent = 'netscape';
+} 
+else if (ereg('Mozilla/([0-9].[0-9]{1,2})', $HTTP_USER_AGENT, $log_version)) 
+{ 
+   $browser_version = $log_version[1]; 
+   $browser_agent = 'mozilla'; 
+} 
+else if (ereg('Konqueror/([0-9].[0-9]{1,2})', $HTTP_USER_AGENT, $log_version)) 
+{ 
+   $browser_version = $log_version[1]; 
+   $browser_agent = 'konqueror'; 
+} 
+else 
+{ 
+   $browser_version = 0; 
+   $browser_agent = 'other'; 
+}
+return $browser_agent;
+}
+
+function selfURL() { 
+$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+$protocol = strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s; 
+$port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
+return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI']; 
+}
+
+function strleft($s1, $s2) { return substr($s1, 0, strpos($s1, $s2)); }
+
+function paginate($start,$limit,$total,$filePath,$otherParams) {
+	global $lang;
+
+	$allPages = ceil($total/$limit);
+
+	$currentPage = floor($start/$limit) + 1;
+
+	$pagination = "";
+	if ($allPages>10) {
+		$maxPages = ($allPages>9) ? 9 : $allPages;
+
+		if ($allPages>9) {
+			if ($currentPage>=1&&$currentPage<=$allPages) {
+				$pagination .= ($currentPage>4) ? " ... " : " ";
+
+				$minPages = ($currentPage>4) ? $currentPage : 5;
+				$maxPages = ($currentPage<$allPages-4) ? $currentPage : $allPages - 4;
+
+				for($i=$minPages-4; $i<$maxPages+5; $i++) {
+					$pagination .= ($i == $currentPage) ? "<a href=\"#\" 
+					class=\"current\">".$i."</a> " : "<a href=\"".$filePath."?
+					start=".(($i-1)*$limit).$otherParams."\">".$i."</a> ";
+				}
+				$pagination .= ($currentPage<$allPages-4) ? " ... " : " ";
+			} else {
+				$pagination .= " ... ";
+			}
+		}
+	} else {
+		for($i=1; $i<$allPages+1; $i++) {
+		$pagination .= ($i==$currentPage) ? "<a href=\"#\" class=\"current\">".$i."</a> "
+		: "<a href=\"".$filePath."?start=".(($i-1)*$limit).$otherParams."\">".$i."</a> ";
+		}
+	}
+
+	if ($currentPage>1) $pagination = "<a href=\"".$filePath."?
+	start=0".$otherParams."\">FIRST</a> <a href=\"".$filePath."?
+	start=".(($currentPage-2)*$limit).$otherParams."\">&lt;</a> ".$pagination;
+	if ($currentPage<$allPages) $pagination .= "<a href=\"".$filePath."?
+	start=".($currentPage*$limit).$otherParams."\">&gt;</a> <a href=\"".$filePath."?
+	start=".(($allPages-1)*$limit).$otherParams."\">LAST</a>";
+
+	echo '<div class="pages">' . $pagination . '</div>';
+}
+/*blog*/
+require_once('blogpost.php');
+mysql_select_db($database_visitors,$visitors);
+function GetBlogPosts($inId=null, $inTagId =null)
+{
+	if (!empty($inId))
+	{
+		$query = mysql_query("SELECT * FROM blog_posts WHERE id = " . $inId . " ORDER BY id DESC"); 
+	}
+	else if (!empty($inTagId))
+	{
+		$query = mysql_query("SELECT blog_posts.* FROM blog_post_tags LEFT JOIN (blog_posts) ON (blog_post_tags.postID = blog_posts.id) WHERE blog_post_tags.tagID =" . $tagID . " ORDER BY blog_posts.id DESC");
+	}
+	else
+	{
+		$query = mysql_query("SELECT * FROM blog_posts ORDER BY id DESC");
+	}
+	
+	$postArray = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+		$myPost = new BlogPost($row["ID"], $row['title'], $row['post'], /*$row['postfull'],*/ $row["author_id"], $row['date_posted']);
+		array_push($postArray, $myPost);
+	}
+    echo $row['date_posted'];
+	return $postArray;
+}
+
+?>

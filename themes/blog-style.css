@@ -1,0 +1,87 @@
+.form1{
+    display: inline;
+}
+.viewpost{
+    float: right;
+    background: transparent;
+   display: inline;
+    margin:0px;
+    padding:0px;
+    border:none;
+    color: white;
+    
+}
+.viewpost:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.box{
+    background: yellow;
+    border-radius: 5px;
+    margin-left:200px;
+    margin-right: 200px;
+}
+.box:hover{
+    background: yellow;
+}
+.commentbox{
+	margin:0 auto;
+	margin-top:3px;
+	background: #dddddd;
+    border-bottom: 1px solid black;
+	width:500px;
+	padding:15px;
+	
+}
+.comment{
+    background:white;
+    border: 1px solid black;
+}
+#main
+{
+	width: 607px;
+	margin: 70px auto;
+}
+h1
+{
+	margin: 0px;padding: 0px;
+	color: #b4eb7e;
+	letter-spacing: -2px;
+	font-size: 3.3em;
+	text-align: center;
+}
+#blogPosts
+{
+	background-color: whitesmoke;
+	border: 1px #615b4a solid;
+	padding: 5px;
+}
+	.post
+	{
+        margin-left:100px;
+        background: yellow;
+        width:700px;
+		border:1px;
+	}
+	.post:last-child
+	{
+		margin: 0px;
+	}
+		h2
+		{
+			margin: 0px;padding: 0px;
+			color: #232f0f;
+			font-size: 2em;
+			letter-spacing: -2px;
+		}
+		.post p
+		{
+			margin: 0px 0px 8px 0px;
+		}
+		.post span
+		{
+			display: block;
+			padding: 4px;
+			background-color: black;
+			color: white;
+		}
